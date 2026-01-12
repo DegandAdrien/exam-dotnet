@@ -7,7 +7,7 @@ public class Labyrinthe
     public (int, int) Exit { get; set; }
     public int[,] Distances { get; set; }
     
-    public Queue<(int, int)> File { get; set; }
+    public Queue<(int, (int, int))> File { get; set; }
 
     public Labyrinthe(bool[,] grid, (int, int) start, (int, int) exit, int[,] distances)
     {
@@ -15,6 +15,8 @@ public class Labyrinthe
         Start = start;
         Exit = exit;
         Distances = distances;
+        File = new Queue<(int, (int, int))>();
+        File.Enqueue((0, start));
     }
     
     public IList<(int, int)> GetNeighbours((int, int) position)
@@ -54,5 +56,29 @@ public class Labyrinthe
         }
 
         return neighbours;
+    }
+    
+    public bool Fill()
+    {
+        var item = this.File.Dequeue();
+
+        if (item.Item2 == Exit)
+        {
+            return true;
+        }
+        if (Distances[item.Item2.Item1, item.Item2.Item2] != 0)
+        {
+            return false;
+        }
+        else
+        {
+            Distances[item.Item2.Item1, item.Item2.Item2] = item.Item1+1;
+            foreach (var neighbour in GetNeighbours(item.Item2))
+            {
+                File.Enqueue((item.Item1+1, neighbour));
+            }
+
+            return false;
+        }
     }
 }
