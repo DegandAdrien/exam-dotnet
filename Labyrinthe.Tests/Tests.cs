@@ -108,4 +108,69 @@ public class UnitTest1
         Assert.Equal([], labyrinthe.GetNeighbours((0, 0)));
         Assert.Equal([], labyrinthe.GetNeighbours((2, 3)));
     }
+
+    [Fact]
+    public void Fill_labyrinthe()
+    {
+        bool[,] grid =
+        {
+            { false, false, false, false },
+            { false, true, true, false },
+            { false, false, false, false }
+        };
+        var start = (1, 1);
+        var exit = (1, 2);
+        int[,] distances =
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+
+        var labyrinthe = new Labyrinthe(grid, start, exit, distances);
+        
+        Assert.Equal((0, start), labyrinthe.File.Dequeue());
+        
+        labyrinthe.File = new Queue<(int, (int, int))>();
+        labyrinthe.File.Enqueue((0, start));
+        
+        Assert.Equal(false, labyrinthe.Fill());
+        
+        labyrinthe.File = new Queue<(int, (int, int))>();
+        labyrinthe.File.Enqueue((1, exit));
+        
+        Assert.Equal(true, labyrinthe.Fill());
+
+
+        labyrinthe.Exit = (2, 2);
+        int[,] distances3 =
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        labyrinthe.Distances = distances3;
+        labyrinthe.File = new Queue<(int, (int, int))>();
+        labyrinthe.File.Enqueue((0, start));
+        labyrinthe.Fill();
+
+        Assert.Single(labyrinthe.File);
+        Assert.Equal(1, labyrinthe.Distances[1, 1]);
+        
+        
+        int[,] distances2 =
+        {
+            { 0, 0, 0, 0 },
+            { 0, 1, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        
+        labyrinthe.Distances = distances2;
+        
+        labyrinthe.File = new Queue<(int, (int, int))>();
+        labyrinthe.File.Enqueue((0, start));
+        labyrinthe.Fill();
+        Assert.Empty(labyrinthe.File);
+    }
+
 }

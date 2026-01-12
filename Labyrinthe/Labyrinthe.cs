@@ -6,6 +6,8 @@ public class Labyrinthe
     public (int, int) Start { get; set; }
     public (int, int) Exit { get; set; }
     public int[,] Distances { get; set; }
+    
+    public Queue<(int, int)> File { get; set; }
 
     public Labyrinthe(bool[,] grid, (int, int) start, (int, int) exit, int[,] distances)
     {
