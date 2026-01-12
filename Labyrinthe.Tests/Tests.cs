@@ -56,4 +56,56 @@ public class UnitTest1
             Assert.Equal(0, d);
         }
     }
+
+    [Fact]
+    public void Case_voisines()
+    {
+        bool[,] falseGrid =
+        {
+            { false, false, false, false },
+            { false, false, false, false },
+            { false, false, false, false }
+        };
+        
+        bool[,] trueGrid =
+        {
+            { true, true, true, true },
+            { true, true, true, true },
+            { true, true, true, true }
+        };
+        
+        bool[,] normalGrid =
+        {
+            { false, false, false, false },
+            { false, true, true, false },
+            { false, false, false, false }
+        };
+        
+        var start = (1, 1);
+        var exit = (1, 2);
+        int[,] distances =
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+
+        var labyrinthe = new Labyrinthe(falseGrid, start, exit, distances);
+
+        labyrinthe.Grid = falseGrid;
+        
+        Assert.Equal([], labyrinthe.GetNeighbours((1, 1)));
+        
+        labyrinthe.Grid = trueGrid;
+        
+        Assert.Equal([(0, 1), (1, 0), (1, 2), (2, 1)], labyrinthe.GetNeighbours((1, 1)));
+        Assert.Equal([(0, 2), (1, 3), (2, 2)], labyrinthe.GetNeighbours((1, 2)));
+        
+        labyrinthe.Grid = normalGrid;
+        
+        Assert.Equal([(1, 2)], labyrinthe.GetNeighbours((1, 1)));
+        Assert.Equal([], labyrinthe.GetNeighbours((1, 2)));
+        Assert.Equal([], labyrinthe.GetNeighbours((0, 0)));
+        Assert.Equal([], labyrinthe.GetNeighbours((2, 3)));
+    }
 }
