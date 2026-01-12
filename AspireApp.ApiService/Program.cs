@@ -1,3 +1,5 @@
+using AspireApp.ApiService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
@@ -20,6 +22,10 @@ if (app.Environment.IsDevelopment())
 }
 
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+
+var productService = ProductSingleton.GetInstance();
+
+app.MapGet("/products", () => productService.GetProducts());
 
 app.MapGet("/", () => "API service is running. Navigate to /weatherforecast to see sample data.");
 
