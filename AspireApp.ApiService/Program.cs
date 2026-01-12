@@ -1,6 +1,9 @@
 using AspireApp.ApiService;
 using AspireApp.ApiService.dtos;
 using AspireApp.ApiService.response;
+using AspireApp.Persistence;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,8 @@ builder.Services.AddProblemDetails();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.AddNpgsqlDataSource(connectionName: "postgresdb");
 
 var app = builder.Build();
 
@@ -28,6 +33,8 @@ string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "
 var productService = ProductSingleton.GetInstance();
 var discountService = DiscountSingleton.GetInstance();
 var orderSingleton = OrderSingleton.GetInstance();
+
+app.MapGet("/db/products", async ([FromServices] AspireAppDbContext db) =>  await db.Products.ToListAsync());
 
 app.MapGet("/products", () => productService.GetProducts());
 

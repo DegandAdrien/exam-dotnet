@@ -13,4 +13,9 @@
     <ProjectReference Include="..\AspireApp.Web\AspireApp.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.0" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.1.0" />
+  </ItemGroup>
+
 </Project>
