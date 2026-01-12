@@ -16,7 +16,12 @@ builder.Services.AddProblemDetails();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.AddNpgsqlDataSource(connectionName: "postgresdb");
+
+builder.Services.AddDbContext<AspireAppDbContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("postgres"));
+});
 
 var app = builder.Build();
 
@@ -28,13 +33,14 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+string[] summaries =
+    ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
 var productService = ProductSingleton.GetInstance();
 var discountService = DiscountSingleton.GetInstance();
 var orderSingleton = OrderSingleton.GetInstance();
 
-app.MapGet("/db/products", async ([FromServices] AspireAppDbContext db) =>  await db.Products.ToListAsync());
+app.MapGet("/db/products", async ([FromServices] AspireAppDbContext db) => await db.Products.ToListAsync());
 
 app.MapGet("/products", () => productService.GetProducts());
 
@@ -42,31 +48,30 @@ app.MapPost("/orders", (OrdersProductDto ordersProductDto) =>
 {
     OrderResponse orderResponse = orderSingleton.OrderProducts(ordersProductDto);
 
-    if (orderResponse.success == false) 
+    if (orderResponse.success == false)
     {
         Console.WriteLine(orderResponse.errors);
         return Results.BadRequest(orderResponse.errors);
     }
-    
+
     return Results.Ok(new OrderResponseDto(orderResponse));
-    
 });
 
 app.MapGet("/", () => "API service is running. Navigate to /weatherforecast to see sample data.");
 
 app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    {
+        var forecast = Enumerable.Range(1, 5).Select(index =>
+                new WeatherForecast
+                (
+                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    Random.Shared.Next(-20, 55),
+                    summaries[Random.Shared.Next(summaries.Length)]
+                ))
+            .ToArray();
+        return forecast;
+    })
+    .WithName("GetWeatherForecast");
 
 app.MapDefaultEndpoints();
 
