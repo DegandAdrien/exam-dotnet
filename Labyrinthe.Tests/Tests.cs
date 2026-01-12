@@ -7,21 +7,21 @@ public class UnitTest1
     {
         bool[,] grid =
         {
-            {true, true, true, true}, 
-            {true, false, false, true},
-            {true, true, true, true}
+            { true, true, true, true },
+            { true, false, false, true },
+            { true, true, true, true }
         };
         var start = (1, 1);
         var exit = (1, 2);
         int[,] distances =
         {
-            {0, 0, 0, 0}, 
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
         };
-        
+
         var labyrinthe = new Labyrinthe(grid, start, exit, distances);
-        
+
         Assert.Equal(grid, labyrinthe.Grid);
         Assert.Equal(start, labyrinthe.Start);
         Assert.Equal(exit, labyrinthe.Exit);
@@ -30,25 +30,30 @@ public class UnitTest1
         Assert.True(labyrinthe.Grid[0, 0]);
     }
     
+    [Fact]
     public void Distance_Labyrinthe()
     {
         bool[,] grid =
         {
-            {true, true, true, true}, 
-            {true, false, false, true},
-            {true, true, true, true}
+            { true, true, true, true },
+            { true, false, false, true },
+            { true, true, true, true }
         };
         var start = (1, 1);
         var exit = (1, 2);
         int[,] distances =
         {
-            {0, 0, 0, 0}, 
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
         };
-        
+
         var labyrinthe = new Labyrinthe(grid, start, exit, distances);
-        
-        Assert.Equal(grid.Length, labyrinthe.distances.Length);
-        Assert.All(labyrinthe.distances, d => Assert.Equal(0, d));
+
+        Assert.Equal(grid.Length, labyrinthe.Distances.Length);
+        foreach (var d in labyrinthe.Distances)
+        {
+            Assert.Equal(0, d);
+        }
     }
+}
