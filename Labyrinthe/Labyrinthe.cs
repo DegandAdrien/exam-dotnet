@@ -81,4 +81,15 @@ public class Labyrinthe
             return false;
         }
     }
+    
+    public int GetDistance()
+    {
+        int distance = 0;
+        while (Fill() != true)
+        {
+            distance++;
+        }
+
+        return distance;
+    }
 }
