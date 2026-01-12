@@ -173,4 +173,46 @@ public class UnitTest1
         Assert.Empty(labyrinthe.File);
     }
 
+    [Fact]
+    public void getDistance_labyrinthe()
+    {
+        bool[,] grid =
+        {
+            { false, false, false, false },
+            { false, true, true, false },
+            { false, false, false, false }
+        };
+        var start = (1, 1);
+        var exit = (1, 2);
+        int[,] distances =
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+
+        var labyrinthe = new Labyrinthe(grid, start, exit, distances);
+        
+        Assert.Equal(1, labyrinthe.GetDistance());
+        
+        bool[,] grid2 =
+        {
+            { false, false, false, false },
+            { false, true, true, false },
+            { false, false, true, false }
+        };
+        var start2 = (1, 1);
+        var exit2 = (2, 2);
+        int[,] distances2 =
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+
+        var labyrinthe2 = new Labyrinthe(grid2, start2, exit2, distances2);
+        
+        Assert.Equal(2, labyrinthe2.GetDistance());
+    }
+
 }
