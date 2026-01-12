@@ -98,8 +98,8 @@ public class UnitTest1
         
         labyrinthe.Grid = trueGrid;
         
-        Assert.Equal([(0, 1), (1, 0), (1, 2), (2, 1)], labyrinthe.GetNeighbours((1, 1)));
-        Assert.Equal([(0, 2), (1, 3), (2, 2)], labyrinthe.GetNeighbours((1, 2)));
+        Assert.Equal([(0, 1), (2, 1), (1, 0), (1, 2), ], labyrinthe.GetNeighbours((1, 1)));
+        Assert.Equal([(0, 2), (2, 2), (1, 3)], labyrinthe.GetNeighbours((1, 2)));
         
         labyrinthe.Grid = normalGrid;
         
